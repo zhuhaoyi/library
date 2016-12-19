@@ -4,7 +4,7 @@ class DB
 {
     private static $instance;
     private $pdo;
-    public $table;
+    private $table;
     private $type;
     private $where;
     private $limit;
@@ -133,13 +133,13 @@ class DB
 
 
     //todo 把数组转化为sql语句中的and set ,
-    public static function array2And(){
+    private static function array2And(){
 
     }
-    public static function array2Set(){
+    private static function array2Set(){
 
     }
-    public static function array2comma(){
+    private static function array2comma(){
 
     }
     //实例化对象并获取表名
