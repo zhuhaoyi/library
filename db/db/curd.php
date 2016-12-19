@@ -9,6 +9,7 @@ class DB
     public $table;
     private $type;
     private $where;
+    private $param;
 
     public function __construct($url = 'localhost', $database = 'test', $username = 'root', $password = '')
     {
@@ -24,6 +25,7 @@ class DB
     {
         try {
             $st = $this->pdo->prepare($this->buildSql('select'));
+            echo $this->buildSql('select');
             $st->execute();
             var_dump($st->fetchAll());
         } catch (\Exception $e) {
@@ -31,10 +33,11 @@ class DB
         }
     }
 
-    public function add()
+    public function add($param)
     {
+
         try {
-            $st = $this->pdo->prepare($this->buildSql('select'));
+            $st = $this->pdo->prepare($this->buildSql('insert',$param));
             $st->execute();
             var_dump($st->fetchAll());
         } catch (\Exception $e) {
@@ -64,20 +67,25 @@ class DB
         }
     }
 
-    private function buildSql($type)
+    public function where(){
+
+        return $this;
+    }
+
+    private function buildSql($type,$param='')
     {
         switch ($type) {
-            case($type='insert'):
+            case($type=='insert'):
+                if(is_array($param)) {
+                    return $sql = "insert into $this->table () values ()";
+                }
+            case($type=='delete'):
+                return $sql = "delete from $this->table";
+            case($type=='update'):
+                return $sql = "update $this->table set";
+            case($type=='select'):
                 return $sql = "select * from $this->table";
-            case($type='delete'):
-                return $sql = "select * from $this->table";
-            case($type='update'):
-                return $sql = "select * from $this->table";
-            case($type='select'):
-                return $sql = "select * from $this->table";
-
         }
-        return $sql = "select * from $this->table";
     }
 
     public static function table($table = '')
@@ -89,4 +97,4 @@ class DB
 }
 
 
-DB::table('ddd')->get();
+DB::table('ddd')->where()->get();
