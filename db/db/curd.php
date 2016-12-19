@@ -5,16 +5,16 @@ class DB
 {
     private static $instance;
     private $pdo;
-    private static $sql;
     public $table;
     private $type;
     private $where;
-    private $param;
+    private $limit;
+
 
     public function __construct($url = 'localhost', $database = 'test', $username = 'root', $password = '')
     {
         if ($this->pdo = new \PDO("mysql:host=$url;dbname=$database", $username, $password)) {
-            echo "连接成功";
+//            echo "success";
         } else {
             echo "连接失败";
             var_dump($this->pdo->errorInfo());
@@ -23,23 +23,27 @@ class DB
 
     public function get()
     {
+        $this->type='select';
         try {
-            $st = $this->pdo->prepare($this->buildSql('select'));
-            echo $this->buildSql('select');
+            $st = $this->pdo->prepare($this->sql());
+            echo $this->sql();
             $st->execute();
             var_dump($st->fetchAll());
-        } catch (\Exception $e) {
+            var_dump($st->errorInfo());
+        } catch (\PDOException $e) {
             echo $e->getMessage();
         }
     }
 
     public function add($param)
     {
-
+        $this->type='insert';
         try {
-            $st = $this->pdo->prepare($this->buildSql('insert',$param));
+            echo $this->sql($param);
+//            exit;
+            $st = $this->pdo->prepare($this->sql($param));
             $st->execute();
-            var_dump($st->fetchAll());
+            var_dump($st->errorInfo());
         } catch (\Exception $e) {
             echo $e->getMessage();
         }
@@ -47,8 +51,9 @@ class DB
 
     public function delete()
     {
+        $this->type='delete';
         try {
-            $st = $this->pdo->prepare($this->buildSql('select'));
+            $st = $this->pdo->prepare($this->sql);
             $st->execute();
             var_dump($st->fetchAll());
         } catch (\Exception $e) {
@@ -58,8 +63,9 @@ class DB
 
     public function update()
     {
+        $this->type='update';
         try {
-            $st = $this->pdo->prepare($this->buildSql('select'));
+            $st = $this->pdo->prepare($this->sql);
             $st->execute();
             var_dump($st->fetchAll());
         } catch (\Exception $e) {
@@ -67,27 +73,67 @@ class DB
         }
     }
 
-    public function where(){
-
+    //赋值给类变量
+    public function where(array $param = [])
+    {
+        $this->where = $param;
         return $this;
     }
 
-    private function buildSql($type,$param='')
+    /**
+     * @param string $param 混合变量 根据查询构造器的需求传入
+     * @return string sql语句
+     */
+    private function sql($param = '')
     {
-        switch ($type) {
-            case($type=='insert'):
-                if(is_array($param)) {
-                    return $sql = "insert into $this->table () values ()";
+        switch ($this->type) {
+            case($this->type == 'insert'):
+                if (is_array($param)) {
+                    $keys=array_keys($param);
+                    $values=array_values($param);
+                    //todo 只能传入一个参数
+                    return "insert into $this->table ($keys[0]) values ($values[0])";
                 }
-            case($type=='delete'):
-                return $sql = "delete from $this->table";
-            case($type=='update'):
-                return $sql = "update $this->table set";
-            case($type=='select'):
-                return $sql = "select * from $this->table";
+            case($this->type == 'delete'):
+                return "delete from $this->table";
+            case($this->type == 'update'):
+                return "update $this->table set";
+            case($this->type == 'select'):
+                if (is_array($this->where)) {
+                    array_keys($this->where);
+                    //组织where语句
+                    foreach ($this->where as $k => $v) {
+                        //判断数据类型 如果是文本则加引号
+                        if (is_string($v)) {
+                            $where = "where $k = '$v'";
+                        } else {
+                            $where = "where $k = $v";
+                        }
+                    }
+                    return "select * from $this->table $where $this->limit";
+                } else {
+                    return "select * from $this->table $this->limit";
+                }
         }
     }
 
+    public function limit($num){
+        $this->limit="limit $num";
+        return $this;
+    }
+
+
+    //todo 把数组转化为sql语句中的and set ,
+    public static function array2And(){
+
+    }
+    public static function array2Set(){
+
+    }
+    public static function array2comma(){
+
+    }
+    //实例化对象并获取表名
     public static function table($table = '')
     {
         self::$instance = new DB();
@@ -97,4 +143,8 @@ class DB
 }
 
 
-DB::table('ddd')->where()->get();
+exit();
+//todo update delete
+//todo where语句只能输入一个参数 limit不支持0,10写法
+DB::table('ddd')->add(['text'=>111]);
+DB::table('ddd')->where([ 'id' => 1])->limit(1)->get();
