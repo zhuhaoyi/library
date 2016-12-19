@@ -1,5 +1,4 @@
 <?php
-namespace zhuhaoyi\db;
 
 class DB
 {
@@ -102,8 +101,8 @@ class DB
                 }
             case($this->type == 'delete'):
                 //todo 只能使用一个参数 变量类型未加括号
-                    $keys=array_keys($param);
-                    $values=array_values($param);
+                $keys=array_keys($param);
+                $values=array_values($param);
                 return "delete from $this->table where ($keys[0]) = ($values[0])";
 
             case($this->type == 'update'):
