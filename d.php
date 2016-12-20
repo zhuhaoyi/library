@@ -1,5 +1,6 @@
 
 <?php
+asdf;
 // Setup an anti-aliased image and a normal image
 $aa = imagecreatetruecolor(400, 100);
 $normal = imagecreatetruecolor(200, 100);
