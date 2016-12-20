@@ -21,10 +21,10 @@ CREATE TABLE `table_blog` (
 EOF;
 // 初始化
 header("Content-Type: text/html; charset=utf-8");
-include "Table.php";
+include "dotcoo_db.php";
 Table::$__host = "127.0.0.1";
 Table::$__user = "root";
-Table::$__password = "123456";
+Table::$__password = "root";
 Table::$__dbname = "test";
 Table::$__charset = "utf8";
 // 创建实体对象

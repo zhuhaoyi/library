@@ -1,5 +1,5 @@
 <?php
-
+namespace database\my_db;
 class DB
 {
     private static $instance;
@@ -151,11 +151,11 @@ class DB
     }
 }
 
-exit();
+//exit();
 //todo update delete
 //todo where语句只能输入一个参数 limit不支持0,10写法
-DB::table('ddd')->add(['text'=>111]);
-DB::table('ddd')->where([ 'id' => 1])->limit(1)->get();
-DB::table('ddd')->delete(['text'=>111]);
-
-DB::table('ddd')->where(['text'=>111])->update(['ccc'=>333]);
+//DB::table('ddd')->add(['text'=>111]);
+//DB::table('ddd')->where([ 'id' => 1])->limit(1)->get();
+//DB::table('ddd')->delete(['text'=>111]);
+//
+//DB::table('ddd')->where(['text'=>111])->update(['ccc'=>333]);
