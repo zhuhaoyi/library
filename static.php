@@ -4,7 +4,7 @@ class foo
 {
     public static $ddd =  'ccc';
 
-    public     function test()
+    public       function test()
     {
 
         echo self::$ddd;
