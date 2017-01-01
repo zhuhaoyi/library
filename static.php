@@ -2,7 +2,7 @@
 
 class foo
 {
-    public static    $ddd =    'ccc';
+    public static $ddd =  'ccc';
 
     public function test()
     {
