@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<teemo>
+    <name>timo</name>
+    <age>20</age>
+    <height>180</height>
+    <tips>
+        <one>111</one>
+        <two>222</two>
+        <three>333</three>
+    </tips>
+</teemo>

@@ -6,6 +6,7 @@ class foo
 
     public function test()
     {
+
         echo self::$ddd;
     }
 
