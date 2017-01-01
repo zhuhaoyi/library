@@ -16,5 +16,5 @@ class foo
     }
 }
 
-
+ccc
 printf("select %s from %s where %s = %d",'*','table','id',5);
